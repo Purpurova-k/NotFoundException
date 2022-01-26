@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import ru.netology.domain.Book;
 import ru.netology.domain.Product;
 import ru.netology.domain.TShirt;
+import ru.netology.exception.NotFoundException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,11 +15,9 @@ class ProductRepositoryTest {
 
     private Book book1 = new Book(1, "Пиковая дама", 500, "Александр Пушкин");
     private Book book2 = new Book(2, "Герой нашего времени", 800, "Михаил Лермонтов");
-    private Book book3 = new Book(3, "Оно", 1000, "Стивен Кинг");
 
     private TShirt tShirt1 = new TShirt(6, "Adidas", 500, "China");
     private TShirt tShirt2 = new TShirt(7, "Nike", 1000, "USA");
-    private TShirt tShirt3 = new TShirt(8, "Zara", 1500, "China");
 
     @Test
     public void shouldSaveOneItem() {
@@ -42,4 +41,16 @@ class ProductRepositoryTest {
     }
 
 
+    @Test
+    public void shouldNotRemoveByInvalidId() {
+        repository.save(book1);
+        repository.save(book2);
+        repository.save(tShirt1);
+        repository.save(tShirt2);
+
+        assertThrows(NotFoundException.class, () -> {
+            repository.removeById(10);
+        });
+
+    }
 }
